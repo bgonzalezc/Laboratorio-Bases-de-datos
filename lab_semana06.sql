@@ -72,6 +72,9 @@ where p.precio between 20000 AND 100000
 order by p.precio DESC;
 
 
+-- sin avances en semana 07
+
+
  
 
 
