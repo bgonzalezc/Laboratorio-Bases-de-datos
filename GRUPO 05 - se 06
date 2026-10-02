@@ -1,0 +1,176 @@
+CREATE DATABASE CursosEstudiante;
+USE CursosEstudiante;
+
+-- 1. TABLA CURSO
+CREATE TABLE Curso (
+    id_curso INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    codigo VARCHAR(20),
+    semestre INT
+);
+
+
+-- 2. TABLA CURSOSESTUDIANTE
+-- Representa a los estudiantes
+
+CREATE TABLE CursosEstudiante (
+    id_estudiante INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    correo VARCHAR(100),
+    carrera VARCHAR(100)
+);
+
+
+-- 3. TABLA MATRICULA
+-- Relaciona estudiante con curso
+
+CREATE TABLE Matricula (
+    id_matricula INT PRIMARY KEY,
+    id_estudiante INT,
+    id_curso INT,
+    fecha_matricula DATE,
+
+    FOREIGN KEY (id_estudiante)
+        REFERENCES CursosEstudiante(id_estudiante),
+
+    FOREIGN KEY (id_curso)
+        REFERENCES Curso(id_curso)
+);
+
+
+
+-- INSERTAR ESTUDIANTES
+
+INSERT INTO CursosEstudiante VALUES
+(1, 'Benjamin Gonzalez', 'benjamin@gmail.com', 'Ingenieria Civil Informatica'),
+(2, 'Eydan Seguel', 'eydan@gmail.com', 'Ingenieria Civil Informatica'),
+(3, 'Nicolas Peréz', 'nicolas@gmail.com', 'Ingenieria Civil Informatica'),
+(4, 'Dario Leal', 'dario@gmail.com', 'Ingenieria Civil Informatica'),
+(5, 'Jose Luna', 'jose@gmail.com', 'Ingenieria Civil Informatica');
+
+
+
+-- INSERTAR CURSOS
+
+
+INSERT INTO Curso VALUES
+(101, 'Bases de Datos', 'ICIF006', 6),
+(102, 'Sistemas Operativos', 'ICIF005', 6),
+(103, 'Introduccion a la Ciencia de Datos', 'ICIF007', 6),
+(104, 'Programacion', 'ICIF001', 2),
+(105, 'Redes de Computadores', 'ICIF008', 5);
+
+
+-- INSERTAR MATRICULAS
+
+INSERT INTO Matricula VALUES
+(1001, 1, 101, '2026-08-01'),
+(1002, 1, 102, '2026-08-01'),
+(1003, 1, 103, '2026-08-01'),
+
+(1004, 2, 101, '2026-08-02'),
+(1005, 2, 102, '2026-08-02'),
+
+(1006, 3, 101, '2026-08-03'),
+(1007, 3, 103, '2026-08-03'),
+
+(1008, 4, 102, '2026-08-04'),
+(1009, 4, 105, '2026-08-04'),
+
+(1010, 5, 101, '2026-08-05'),
+(1011, 5, 104, '2026-08-05');
+
+
+
+-- CONSULTA 1
+-- MOSTRAR ESTUDIANTES Y SUS CURSOS
+
+SELECT
+    CursosEstudiante.nombre,
+    Curso.nombre
+FROM CursosEstudiante
+JOIN Matricula
+    ON CursosEstudiante.id_estudiante = Matricula.id_estudiante
+JOIN Curso
+    ON Matricula.id_curso = Curso.id_curso;
+
+
+
+-- CONSULTA 2
+-- CURSOS DE BENJAMIN
+
+SELECT
+    CursosEstudiante.nombre,
+    Curso.nombre,
+    Matricula.fecha_matricula
+FROM CursosEstudiante
+JOIN Matricula
+    ON CursosEstudiante.id_estudiante = Matricula.id_estudiante
+JOIN Curso
+    ON Matricula.id_curso = Curso.id_curso
+WHERE CursosEstudiante.nombre = 'Benjamin Gonzalez';
+
+
+
+-- CONSULTA 3
+-- ESTUDIANTES MATRICULADOS EN BASES DE DATOS
+
+SELECT
+    CursosEstudiante.nombre,
+    Curso.nombre
+FROM CursosEstudiante
+JOIN Matricula
+    ON CursosEstudiante.id_estudiante = Matricula.id_estudiante
+JOIN Curso
+    ON Matricula.id_curso = Curso.id_curso
+WHERE Curso.nombre = 'Bases de Datos';
+
+
+-- CONSULTA 4
+-- ORDENAR ESTUDIANTES ALFABETICAMENTE
+
+SELECT
+    CursosEstudiante.nombre,
+    Curso.nombre
+FROM CursosEstudiante
+JOIN Matricula
+    ON CursosEstudiante.id_estudiante = Matricula.id_estudiante
+JOIN Curso
+    ON Matricula.id_curso = Curso.id_curso
+ORDER BY CursosEstudiante.nombre;
+
+
+
+-- CONSULTA 5
+-- BUSCAR CURSOS QUE CONTENGAN "Datos"
+
+SELECT
+    id_curso,
+    nombre,
+    codigo
+FROM Curso
+WHERE nombre LIKE '%Datos%';
+
+
+
+-- CONSULTA 6
+-- CURSOS ENTRE SEMESTRE 5 Y 6
+
+
+SELECT
+    id_curso,
+    nombre,
+    semestre
+FROM Curso
+WHERE semestre BETWEEN 5 AND 6;
+
+
+
+-- CONSULTA 7
+-- BUSCAR CURSOS ESPECIFICOS
+
+SELECT
+    id_curso,
+    nombre
+FROM Curso
+WHERE id_curso IN (101, 102, 103);
